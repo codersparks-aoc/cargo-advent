@@ -1,0 +1,13 @@
+[package]
+name = "cargo-advent"
+version = "0.0.1"
+edition = "2024"
+authors = ["codersparks <codersparks@users.noreply.github.com>"]
+description = "Yet another cli to help with Advent of Code challenges"
+readme = "README.md"
+repository = "https://github.com/codersparks-aoc/cargo-advent"
+license = "MIT"
+keywords = ["advent", "aoc"]
+categories = ["command-line-utilities", "development-tools::cargo-plugins"]
+
+[dependencies]
