@@ -10,4 +10,20 @@ license = "MIT"
 keywords = ["advent", "aoc"]
 categories = ["command-line-utilities", "development-tools::cargo-plugins"]
 
+[lib]
+name = "cargo_advent"
+path = "src/lib.rs"
+
+[[bin]]
+name = "cargo-advent"
+path = "src/main.rs"
+
 [dependencies]
+cargo-generate = "0.23.5"
+chrono = "0.4.42"
+clap = { version = "4.5.48", features = ["derive"] }
+tracing = "0.1.41"
+tracing-subscriber = "0.3.20"
+
+[dev-dependencies]
+shlex = "1.3.0"
