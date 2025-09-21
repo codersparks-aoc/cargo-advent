@@ -18,12 +18,13 @@ pub fn parse_command_line() -> AppContext {
     debug!("parsed arguments: {:#?}", cmd_args);
     debug!("log level: {}", level);
 
-
     let app_mode = match cmd_args.mode {
         ModeSubCommands::GenerateRustProject { data } => parse_generate_rust_project_args(data),
     };
 
-    AppContext { app_action: app_mode }
+    AppContext {
+        app_action: app_mode,
+    }
 }
 
 fn parse_generate_rust_project_args(data: GenerateRustProjectCliArgs) -> AppAction {
@@ -39,25 +40,22 @@ fn parse_generate_rust_project_args(data: GenerateRustProjectCliArgs) -> AppActi
         project_name,
         path,
         aoc_data,
+        template: data.template,
     }
 }
 
 #[cfg(test)]
-mod tests{
+mod tests {
     use crate::command_line::model::{ModeSubCommands, RootCliArgs};
     use crate::command_line::parse_generate_rust_project_args;
-    use crate::test_utils::init_test_logging;
     use cargo_advent::context::{AocData, AppAction};
     use chrono::{Datelike, Utc};
     use clap::Parser;
-    use tracing::{debug, info};
+    use tracing::info;
 
-    #[test]
+    #[test_log::test]
     fn test_parse_generate_rust_project_args_no_optional_supplied() {
-
-        init_test_logging();
-
-        let line = "wibble generate";
+        let line = "cargo-advent -vvv generate";
         let args = shlex::split(line).unwrap();
         let cli_args = RootCliArgs::try_parse_from(args).unwrap();
 
@@ -68,29 +66,38 @@ mod tests{
                 let action = parse_generate_rust_project_args(data);
 
                 match action {
-                    AppAction::GenerateRustProject { project_name, path, aoc_data } => {
+                    AppAction::GenerateRustProject {
+                        project_name,
+                        path,
+                        aoc_data,
+                        template,
+                    } => {
                         let date = Utc::now();
                         let day = date.day();
                         let year = date.year();
                         assert_eq!(project_name, format!("aoc_{}_{}", year, day));
                         assert_eq!(path, "./");
-                        assert_eq!(aoc_data, AocData {
-                            year,
-                            day,
-                            ..AocData::default()
-                        } );
+                        assert_eq!(
+                            template,
+                            "https://github.com/codersparks-aoc/aoc-rust-template.git"
+                        );
+                        assert_eq!(
+                            aoc_data,
+                            AocData {
+                                year,
+                                day,
+                                ..AocData::default()
+                            }
+                        );
                     }
                 }
             }
         }
     }
 
-    #[test]
+    #[test_log::test]
     fn test_parse_generate_rust_project_args_all_optional_supplied() {
-
-        init_test_logging();
-
-        let line = "wibble generate -n test-name -d 2 -y 2010 -p \"./random\" -t template.url -b base.url";
+        let line = "cargo-advent -vvv generate -n test-name -d 2 -y 2010 -p \"./random\" -t template.url -b base.url";
 
         let args = shlex::split(line).unwrap();
         let cli_args = RootCliArgs::try_parse_from(args).unwrap();
@@ -101,16 +108,23 @@ mod tests{
                 let action = parse_generate_rust_project_args(data);
 
                 match action {
-                    AppAction::GenerateRustProject { project_name, path, aoc_data } => {
-
+                    AppAction::GenerateRustProject {
+                        project_name,
+                        path,
+                        aoc_data,
+                        template,
+                    } => {
                         assert_eq!(project_name, "test-name");
                         assert_eq!(path, "./random");
-                        assert_eq!(aoc_data, AocData {
-                            base_url: "base.url".to_string(),
-                            year: 2010,
-                            day: 2,
-
-                        } );
+                        assert_eq!(
+                            aoc_data,
+                            AocData {
+                                base_url: "base.url".to_string(),
+                                year: 2010,
+                                day: 2,
+                            }
+                        );
+                        assert_eq!(template, "template.url");
                     }
                 }
             }

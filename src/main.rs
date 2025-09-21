@@ -1,12 +1,10 @@
+use cargo_advent::AdventResult;
 use tracing::debug;
 
 mod command_line;
 
-#[cfg(test)]
-mod test_utils;
-
-fn main() {
+fn main() -> AdventResult<()> {
     let app_context = command_line::parse_command_line();
     debug!("{:#?}", app_context);
-    println!("Hello, world!");
+    app_context.run_action()
 }

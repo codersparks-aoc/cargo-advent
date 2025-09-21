@@ -31,13 +31,13 @@ pub struct GenerateRustProjectCliArgs {
     /// The name to use for the generated project. If not supplied will use name aoc-{aoc_year}-{aoc_day}
     #[arg(short = 'n', long)]
     pub project_name: Option<String>,
-    /// The repository to use as a template.
+    /// The source of the template
     #[arg(
         short,
         long,
         default_value = "https://github.com/codersparks-aoc/aoc-rust-template.git"
     )]
-    pub template_repository: String,
+    pub template: String,
     /// The data required for configuration for advent of code
     #[clap(flatten)]
     pub aoc_cli_args: AocCliArgs,
