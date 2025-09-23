@@ -24,3 +24,12 @@ target
 # Added by cargo
 
 /target
+
+# Local settings
+
+# To aid in dev we use a config that outputs generated projects to a 'dev-output' folder therefore we ignore anything in
+# that folder
+/dev-output
+# We use a .env file to configure command line options during development testing so we .gitignore, however a common
+# file is stored in examples/env/.env-example
+.env

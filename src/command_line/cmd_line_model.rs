@@ -9,7 +9,7 @@ use tracing::debug;
 #[command(version, about, long_about = None)]
 pub struct RootCliArgs {
     /// Set the verbosity of the logging default ERROR, -v INFO, -vv DEBUG
-    #[arg(short, long, action=clap::ArgAction::Count)]
+    #[arg(short, long, action=clap::ArgAction::Count, env="ADVENT_VERBOSITY")]
     pub verbosity: u8,
     /// Provide the sub commands functionality
     #[command(subcommand)]
@@ -29,33 +29,34 @@ pub enum ModeSubCommands {
 #[derive(Debug, Clone, Args)]
 pub struct GenerateRustProjectCliArgs {
     /// The name to use for the generated project. If not supplied will use name aoc-{aoc_year}-{aoc_day}
-    #[arg(short = 'n', long)]
+    #[arg(short = 'n', long, env = "ADVENT_PROJECT_NAME")]
     pub project_name: Option<String>,
     /// The source of the template
     #[arg(
         short,
         long,
-        default_value = "https://github.com/codersparks-aoc/aoc-rust-template.git"
+        default_value = "https://github.com/codersparks-aoc/aoc-rust-template.git",
+        env = "ADVENT_TEMPLATE_URL"
     )]
     pub template: String,
     /// The data required for configuration for advent of code
     #[clap(flatten)]
     pub aoc_cli_args: AocCliArgs,
     /// The path to use for where to create the project. Default ./{project_name}
-    #[arg(short, long)]
+    #[arg(short, long, env = "ADVENT_PROJECT_PATH")]
     pub path: Option<String>,
 }
 
 #[derive(Debug, Clone, Args)]
 pub struct AocCliArgs {
     /// The base url for the aoc website
-    #[arg(short, long)]
+    #[arg(short, long, env = "ADVENT_BASE_URL")]
     pub base_url: Option<String>,
     /// The year the aoc puzzle was published. If not supplied will use current year
-    #[arg(short, long)]
+    #[arg(short, long, env = "ADVENT_YEAR")]
     pub year: Option<i32>,
     /// The day the aoc puzzle was published. If not supplied will use current day
-    #[arg(short, long)]
+    #[arg(short, long, env = "ADVENT_DAY")]
     pub day: Option<u32>,
 }
 
