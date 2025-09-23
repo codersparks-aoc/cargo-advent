@@ -1,12 +1,12 @@
-use crate::command_line::model::{GenerateRustProjectCliArgs, ModeSubCommands};
+use crate::command_line::cmd_line_model::{GenerateRustProjectCliArgs, ModeSubCommands};
 use cargo_advent::context::{AocData, AppAction, AppContext};
 use clap::Parser;
 use tracing::{debug, Level};
 
-mod model;
+mod cmd_line_model;
 
 pub fn parse_command_line() -> AppContext {
-    let cmd_args = model::RootCliArgs::parse();
+    let cmd_args = cmd_line_model::RootCliArgs::parse();
 
     let level = match cmd_args.verbosity {
         0 => Level::ERROR,
@@ -32,7 +32,7 @@ fn parse_generate_rust_project_args(data: GenerateRustProjectCliArgs) -> AppActi
     debug!("parsed aoc_data: {:#?}", aoc_data);
     let project_name = data
         .project_name
-        .unwrap_or_else(|| format!("aoc_{}_{}", aoc_data.year, aoc_data.day));
+        .unwrap_or_else(|| format!("aoc-{}-{}", aoc_data.year, aoc_data.day));
     debug!("parsed project_name: {}", project_name);
     let path = data.path.unwrap_or_else(|| "./".to_string());
     debug!("parsed path: {}", path);
@@ -46,7 +46,7 @@ fn parse_generate_rust_project_args(data: GenerateRustProjectCliArgs) -> AppActi
 
 #[cfg(test)]
 mod tests {
-    use crate::command_line::model::{ModeSubCommands, RootCliArgs};
+    use crate::command_line::cmd_line_model::{ModeSubCommands, RootCliArgs};
     use crate::command_line::parse_generate_rust_project_args;
     use cargo_advent::context::{AocData, AppAction};
     use chrono::{Datelike, Utc};
