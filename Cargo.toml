@@ -1,6 +1,6 @@
 [package]
 name = "cargo-advent"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2024"
 authors = ["codersparks <codersparks@users.noreply.github.com>"]
 description = "Yet another cli to help with Advent of Code challenges"
