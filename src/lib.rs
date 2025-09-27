@@ -1,4 +1,5 @@
 use crate::functions::generate_project::GenerateProjectError;
+use color_eyre::Report;
 use thiserror::Error;
 
 pub mod context;
@@ -10,6 +11,6 @@ pub type AdventResult<T> = Result<T, AdventError>;
 pub enum AdventError {
     #[error(transparent)]
     GenerateProjectError(#[from] GenerateProjectError),
-    #[error(".env file exists but could not be read: {0}")]
-    EnvLoadError(String),
+    #[error(transparent)]
+    ColorEyreReport(#[from] Report),
 }
